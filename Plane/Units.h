@@ -12,19 +12,25 @@ namespace Window {
 	point<GLint> size(400, 800);
 	point<GLint> position(40, 40);
 	const char name[] = "PlaneGame";
-	void Init(void);
+	void InitWindow(void);
+	void InitColor(void);
 }
  
-void Window::Init(void)
+void Window::InitWindow(void)
 {
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(size.x, size.y);
 	glutInitWindowPosition(position.x, position.y);
 	glutCreateWindow(name);
+}
+
+void Window::InitColor(void)
+{
 	glClearColor(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.0f, 0.0f, 0.0f);
 }
+
 //------------------Bullet--------------
 struct Bullet {
 	static const Type size;
@@ -34,7 +40,7 @@ struct Bullet {
 	Bullet(const PT start, const PT end) :start(start), end(end) {};
 	void Display(void);
 };
-const Type Bullet::size = 0.2f;
+const Type Bullet::size = 0.1f;
 
 void Bullet::Display(void)
 {
@@ -62,17 +68,22 @@ void Plane::DisplayPlane(void)
 	glBegin(GL_TRIANGLES);
 	glVertex2f(Pt.x - side, Pt.y - after);
 	glVertex2f(Pt.x, Pt.y + ago);
-	glVertex2f(Pt.x - side, Pt.y - after);
+	glVertex2f(Pt.x + side, Pt.y - after);
 	glEnd();
 	glFlush();
 }
 
 void Plane::Display(void)
 {
+	Window::InitColor();
 	DisplayPlane();
-	for (auto bullet : bullets)
+	Sleep(5);
+	for (auto &bullet : bullets) {
 		bullet.Display();
-
+		bullet.start.y += 0.01f;
+		bullet.end.y += 0.01f;
+	}
+	glutPostRedisplay();
 }
 
 void Plane::MouseButton(GLint button, GLint action, GLint mouse_x, GLint mouse_y)
@@ -82,6 +93,7 @@ void Plane::MouseButton(GLint button, GLint action, GLint mouse_x, GLint mouse_y
 		NewBullet.start.y += ago + Bullet::size;
 		NewBullet.end.y += ago;
 		bullets.push_back(NewBullet);
+		glutPostRedisplay();
 	}
 }
 
@@ -92,6 +104,7 @@ void Plane::MouseMove(GLint mouse_x, GLint mouse_y)
 	NewCenter.x = 2.0f* mouse_x / size.x - 1.0f;
 	NewCenter.y = -2.0f*mouse_y / size.y + 1.0f;
 	PlaneCenter = NewCenter;
+	glutPostRedisplay();
 }
 
 #endif // !UNITS_H
