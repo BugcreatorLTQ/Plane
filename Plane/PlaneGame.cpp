@@ -5,6 +5,7 @@ int main(int argc,char *argv[])
 {
 	glutInit(&argc, argv);
 	Window::InitWindow();
+	glLineWidth(4.0);
 	glutDisplayFunc(Plane::Display);
 	glutMouseFunc(Plane::MouseButton);
 	glutPassiveMotionFunc(Plane::MouseMove);

@@ -39,6 +39,7 @@ struct Bullet {
 	Bullet(void) {};
 	Bullet(const PT start, const PT end) :start(start), end(end) {};
 	void Display(void);
+	GLboolean IsOk(void);
 };
 const Type Bullet::size = 0.1f;
 
@@ -49,6 +50,16 @@ void Bullet::Display(void)
 	glVertex2f(end.x, end.y);
 	glEnd();
 	glFlush();
+}
+
+GLboolean Bullet::IsOk(void)
+{
+	if (end.y <= -1.0f)
+		throw"Bullet Error";
+	if (end.y >= 1.0f)
+		return false;
+	else
+		return true;
 }
 
 //------------------Plane---------------
@@ -77,11 +88,16 @@ void Plane::Display(void)
 {
 	Window::InitColor();
 	DisplayPlane();
-	Sleep(5);
-	for (auto &bullet : bullets) {
-		bullet.Display();
-		bullet.start.y += 0.01f;
-		bullet.end.y += 0.01f;
+	Sleep(2);
+	auto bullet = bullets.begin();
+	while (bullet!=bullets.end()) {
+		bullet->Display();
+		bullet->start.y += Bullet::size*0.05f;
+		bullet->end.y += Bullet::size*0.05f;
+		if (bullet->IsOk())
+			bullet++;
+		else
+			bullet = bullets.erase(bullet);
 	}
 	glutPostRedisplay();
 }
@@ -93,7 +109,6 @@ void Plane::MouseButton(GLint button, GLint action, GLint mouse_x, GLint mouse_y
 		NewBullet.start.y += ago + Bullet::size;
 		NewBullet.end.y += ago;
 		bullets.push_back(NewBullet);
-		glutPostRedisplay();
 	}
 }
 
@@ -104,7 +119,6 @@ void Plane::MouseMove(GLint mouse_x, GLint mouse_y)
 	NewCenter.x = 2.0f* mouse_x / size.x - 1.0f;
 	NewCenter.y = -2.0f*mouse_y / size.y + 1.0f;
 	PlaneCenter = NewCenter;
-	glutPostRedisplay();
 }
 
 #endif // !UNITS_H
