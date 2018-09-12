@@ -14,6 +14,8 @@ struct point {
 	Type operator*(const point & other) const;
 	point & operator+=(const point & other);
 	point operator+(const point & other) const;
+	point & operator-=(const point & other);
+	point operator-(const point & other) const;
 	Type abs() const;
 };
 
@@ -59,6 +61,23 @@ point<Type> point<Type>::operator+(const point<Type> & other) const
 {
 	point temp = *this;
 	temp += other;
+	return temp;
+}
+
+
+template<typename Type>
+point<Type> & point<Type>::operator-=(const point<Type> & other)
+{
+	x -= other.x;
+	y -= other.y;
+	return *this;
+}
+
+template<typename Type>
+point<Type> point<Type>::operator-(const point<Type> & other) const
+{
+	point temp = *this;
+	temp -= other;
 	return temp;
 }
 
