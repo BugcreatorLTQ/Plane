@@ -10,6 +10,7 @@ int main(int argc,char *argv[])
 	glutDisplayFunc(Plane::Display);
 	glutMouseFunc(Plane::MouseButton);
 	glutPassiveMotionFunc(Plane::MouseMove);
+  glutMotionFunc(Plane::MouseButtonMove);
 	Window::InitColor();
 	glutMainLoop();
 	return 0;

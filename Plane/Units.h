@@ -112,6 +112,7 @@ namespace Plane {
 	void Display(void);
 	void MouseButton(GLint button, GLint action, GLint mouse_x, GLint mouse_y);
 	void MouseMove(GLint mouse_x, GLint mouse_y);
+  void MouseButtonMove(GLint mouse_x, GLint mouse_y);
 }
 
 void Plane::DisplayPlane(void)
@@ -135,7 +136,7 @@ void Plane::Display(void)
   if (rand() % 20 == 0) {
     Enrmy NewEnrmy;
     Type temp = rand() % 20 * 0.1f - 1.0f;
-    NewEnrmy.Center = PT(temp, 1.0f);
+    NewEnrmy.Center = PT(temp, 1.0f); 
     enrmys.push_back(NewEnrmy);
   }
   //Display Enrmys
@@ -193,6 +194,16 @@ void Plane::MouseMove(GLint mouse_x, GLint mouse_y)
 	NewCenter.x = 2.0f* mouse_x / size.x - 1.0f;
 	NewCenter.y = -2.0f*mouse_y / size.y + 1.0f;
 	Center = NewCenter;
+}
+
+void Plane::MouseButtonMove(GLint mouse_x, GLint mouse_y)
+{
+  static unsigned int count = 0;
+  MouseMove(mouse_x, mouse_y);
+  //Create Bullets
+  count++;
+  if ((count %= 5) == 4)
+    MouseButton(GLUT_LEFT_BUTTON, GLUT_DOWN, mouse_x, mouse_y);
 }
 
 //-----------------Message-----------------
