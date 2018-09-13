@@ -21,7 +21,7 @@ namespace Window {
  
 void Window::InitWindow(void)
 {
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(size.x, size.y);
 	glutInitWindowPosition(position.x, position.y);
 	glutCreateWindow(name);
@@ -132,7 +132,7 @@ void Plane::Display(void)
 	DisplayPlane();
 	Sleep(20);
   //Create Enrmys
-  if (rand() % 50 == 0) {
+  if (rand() % 20 == 0) {
     Enrmy NewEnrmy;
     Type temp = rand() % 20 * 0.1f - 1.0f;
     NewEnrmy.Center = PT(temp, 1.0f);
@@ -172,6 +172,7 @@ void Plane::Display(void)
 			bullet = bullets.erase(bullet);
 	}
 	glutPostRedisplay();
+  glutSwapBuffers();
 }
 
 void Plane::MouseButton(GLint button, GLint action, GLint mouse_x, GLint mouse_y)
